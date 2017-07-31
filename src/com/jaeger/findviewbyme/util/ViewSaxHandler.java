@@ -25,6 +25,7 @@ public class ViewSaxHandler extends DefaultHandler {
     private List<ViewPart> viewPartList;
     private String layoutPath = "";
     private Project project;
+    private String layoutId;
 
     public static void main(String[] args) {
         String str = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
@@ -72,14 +73,12 @@ public class ViewSaxHandler extends DefaultHandler {
 
     }
 
-
     @Override
     public void startDocument() throws SAXException {
         if (viewPartList == null) {
             viewPartList = new ArrayList<ViewPart>();
         }
     }
-
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
@@ -95,6 +94,10 @@ public class ViewSaxHandler extends DefaultHandler {
                     PsiFile psiFile = PsiManager.getInstance(getProject()).findFile(virtualFile);
                     try {
                         if (psiFile != null) {
+                            String id = attributes.getValue("android:id");
+                            if (id != null)
+                                layoutId = id.replace("@+id/", "").replace("@id/", "").replace("@android:id/", "");
+                            ;
                             this.createViewList(psiFile.getText());
                         }
                     } catch (ParserConfigurationException e) {
@@ -109,7 +112,11 @@ public class ViewSaxHandler extends DefaultHandler {
             if (id != null) {
                 ViewPart viewPart = new ViewPart();
                 viewPart.setType(qName);
-                viewPart.setId(id.replace("@+id/", "").replace("@id/", "").replace("@android:id/", ""));
+                String _id = id.replace("@+id/", "").replace("@id/", "").replace("@android:id/", "");
+                if (layoutId != null) {
+                    viewPart.setId(layoutId + "_" + _id);
+                } else
+                    viewPart.setId(_id);
                 viewPartList.add(viewPart);
             }
         }
