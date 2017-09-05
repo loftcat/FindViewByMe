@@ -69,9 +69,6 @@ public class ViewSaxHandler extends DefaultHandler {
         parser.parse(xmlStream, this);
     }
 
-    public void createViewList(InputStream xmlStream) throws Exception {
-
-    }
 
     @Override
     public void startDocument() throws SAXException {
@@ -97,7 +94,6 @@ public class ViewSaxHandler extends DefaultHandler {
                             String id = attributes.getValue("android:id");
                             if (id != null)
                                 layoutId = id.replace("@+id/", "").replace("@id/", "").replace("@android:id/", "");
-                            ;
                             this.createViewList(psiFile.getText());
                         }
                     } catch (ParserConfigurationException e) {
@@ -120,12 +116,14 @@ public class ViewSaxHandler extends DefaultHandler {
                 viewPartList.add(viewPart);
             }
         }
-
     }
 
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
-
+        if (qName.equals("include")) {
+            if (layoutId != null)
+                layoutId = null;
+        }
     }
 
     @Override

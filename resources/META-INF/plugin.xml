@@ -9,12 +9,7 @@
     ]]></description>
 
     <change-notes><![CDATA[
-     <li>0. Now can remember "add m" profile info</li>
-     <li>1. Now can generate in Java source file</li>
-     <li>2. Support generate "findViewById" code for activity.</li>
-     <li>3. Support generate "findViewById" code for fragment, and you can customize root view name.</li>
-     <li>4. Support generate "findViewById" code for ViewHolder.</li>
-     <li>5. Bug fix</li>
+     <li>0. include文件内组件id名称加上include标签id，以应对同个布局文件内include多个相同布局时，内部组件没法区分的问题</li>
      <br>
     ]]>
     </change-notes>
